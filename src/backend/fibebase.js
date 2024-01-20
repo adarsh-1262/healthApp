@@ -14,6 +14,10 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+// Check if Firebase app is not initialized
+if (!window.firebaseApps || !window.firebaseApps.length) {
+    const firebaseApp = initializeApp(firebaseConfig);
+  }
 
 const auth = getAuth(app);
 const firestore = getFirestore(app);

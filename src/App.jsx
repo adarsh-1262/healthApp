@@ -6,7 +6,7 @@ import Home from './components/Home';
 import HealthRecords from './components/HealthRecords';
 import EmergencyServices from './components/EmergencyServices';
 import Telehealth from './components/Telehealth';
-import { UserProfile } from './components/UserProfile';
+import UserProfile  from './components/UserProfile';
 import Signup from './components/Signup';
 import Signin from './components/Signin';
 import { signUpUser, signInUser, signOutUser, onAuthStateChangedListener } from './backend/auth';

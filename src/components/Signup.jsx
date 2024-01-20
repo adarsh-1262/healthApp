@@ -6,25 +6,51 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
-  const [photoURL, setPhotoURL] = useState(''); // Add state for user photo URL
+  const [photoURL, setPhotoURL] = useState('');
+  const [photoFile, setPhotoFile] = useState(null);
 
   const handleSignup = async (e) => {
     e.preventDefault();
 
     try {
+      // If the user provides a photo file, handle the file upload
+      let photoUrlFromUpload = '';
+      if (photoFile) {
+        photoUrlFromUpload = await uploadPhoto(photoFile);
+      }
+
       // Pass the additional information for display name and photoURL
-      await signUpUser(email, password, displayName, photoURL);
+      await signUpUser(email, password, displayName, photoURL || photoUrlFromUpload);
       console.log('User signed up successfully!');
       // Redirect to the home page after successful signup
-      // Navigate('/');
+      Navigate('/');
     } catch (error) {
       console.error('Error signing up:', error.message);
     }
   };
 
+  const uploadPhoto = async (file) => {
+    // Implement your logic to upload the photo file and get the URL
+    // You can use a service like Firebase Storage or any other file storage service
+    // For simplicity, this function returns a placeholder URL
+    return 'https://via.placeholder.com/150'; // Replace with actual URL
+  };
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    setPhotoFile(file);
+
+    // Display a preview of the selected photo
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setPhotoURL(event.target.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
   return (
-    <div className="signup-container">
-      <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
+    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-md shadow-md">
+      <h2 className="text-2xl font-bold mb-4 text-center">Sign Up</h2>
       <form onSubmit={handleSignup}>
         <label className="block mb-4">
           <span className="text-gray-700">Email:</span>
@@ -57,17 +83,21 @@ const Signup = () => {
           />
         </label>
         <label className="block mb-4">
-          <span className="text-gray-700">Profile Picture URL:</span>
+          <span className="text-gray-700">Profile Picture:</span>
           <input
-            type="text"
+            type="file"
+            accept="image/*"
+            capture="user"
             className="form-input mt-1 block w-full"
-            value={photoURL}
-            onChange={(e) => setPhotoURL(e.target.value)}
+            onChange={handlePhotoChange}
           />
+          {photoURL && (
+            <img src={photoURL} alt="Selected" className="mt-2 max-w-full h-32 object-cover" />
+          )}
         </label>
         <button
           type="submit"
-          className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+          className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 w-full"
         >
           Sign Up
         </button>

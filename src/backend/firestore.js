@@ -21,3 +21,4 @@ export const getHealthRecords = async (userId) => {
     throw error;
   }
 };
+

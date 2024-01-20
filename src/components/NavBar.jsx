@@ -55,6 +55,7 @@ const NavBar = ({ user, signOutUser }) => {
           {user ? (
             <div className="text-white">
               <p className="mr-4">Hello, {user.displayName}!</p>
+              {console.log(user)};
               <button
                 onClick={signOutUser}
                 className="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600 transition duration-300"

@@ -1,6 +1,14 @@
 // auth.js
 import { initializeApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile as firebaseUpdateProfile, onAuthStateChanged } from 'firebase/auth';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile as firebaseUpdateProfile,
+  onAuthStateChanged,
+} from 'firebase/auth';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: "AIzaSyC15XoYP2cXSu_dYTgu_EG_U2sqGXa5HY8",
@@ -52,9 +60,21 @@ const updateProfile = async (user, profileData) => {
   }
 };
 
+// Upload Photo
+const uploadPhoto = async (userId, file) => {
+  try {
+    const storageRef = ref(storage, `user-photos/${userId}`);
+    const photoSnapshot = await uploadBytes(storageRef, file);
+    const photoURL = await getDownloadURL(photoSnapshot.ref);
+    return photoURL;
+  } catch (error) {
+    throw error;
+  }
+};
+
 // Listen for authentication state changes
 const onAuthStateChangedListener = (callback) => {
   return onAuthStateChanged(auth, callback);
 };
 
-export { auth, onAuthStateChangedListener, updateProfile, signOutUser, signInUser, signUpUser };
+export { auth, onAuthStateChangedListener, updateProfile, signOutUser, signInUser, signUpUser, uploadPhoto };
