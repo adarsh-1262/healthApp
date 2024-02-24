@@ -1,9 +1,4 @@
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 # healthApp
+This website is made for the Google Global Solution Challenge 2024 under which from 17 UN sustainable development goals we have selected the health sector and made this project.
+To view this website:-
+# Click on this link: https://www.healthapp.dev/
