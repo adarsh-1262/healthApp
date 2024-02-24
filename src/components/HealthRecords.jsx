@@ -1,76 +1,94 @@
-import React, { useState, useEffect } from 'react';
-import { addHealthRecord, getHealthRecords } from '../backend/firestore';
+import React, { useState } from 'react';
 
-const HealthRecords = ({ user }) => {
-  const [healthRecords, setHealthRecords] = useState([]);
-  const [newRecord, setNewRecord] = useState('');
+const HealthRecord = ({ record, onUpdate, onDelete }) => {
+  const [editable, setEditable] = useState(false);
+  const [updatedRecord, setUpdatedRecord] = useState(record);
 
-  useEffect(() => {
-    // Fetch health records when the component mounts
-    getHealthRecordData(user.uid);
-  }, [user]);
-
-  const getHealthRecordData = async (userId) => {
-    try {
-      const records = await getHealthRecords(userId);
-      setHealthRecords(records);
-    } catch (error) {
-      console.error('Error getting health records:', error.message);
-    }
+  const handleUpdate = () => {
+    onUpdate(updatedRecord);
+    setEditable(false);
   };
 
-  const handleAddRecord = async () => {
-    try {
-      // Add the new record to the user's health records
-      await addHealthRecord(user.uid, newRecord);
-
-      // Refresh the health records list
-      getHealthRecordData(user.uid);
-
-      // Clear the input field
-      setNewRecord('');
-    } catch (error) {
-      console.error('Error adding health record:', error.message);
-    }
+  const handleDelete = () => {
+    onDelete(record.id);
   };
 
   return (
-    <div className="container mx-auto mt-8">
-      <h2 className="text-3xl font-bold mb-4">Health Records</h2>
-
-      {/* Add Health Record Form */}
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">Add New Health Record:</label>
-        <div className="flex">
-          <input
-            type="text"
-            className="form-input w-full mr-2"
-            placeholder="Enter health record"
-            value={newRecord}
-            onChange={(e) => setNewRecord(e.target.value)}
-          />
-          <button
-            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-            onClick={handleAddRecord}
-          >
-            Add
-          </button>
-        </div>
-      </div>
-
-      {/* Display Health Records */}
+    <div className="flex items-center justify-between border-b py-2">
+      {editable ? (
+        <input
+          type="text"
+          value={updatedRecord.text}
+          onChange={(e) => setUpdatedRecord({ ...updatedRecord, text: e.target.value })}
+          className="mr-2"
+        />
+      ) : (
+        <div>{record.text}</div>
+      )}
       <div>
-        <h3 className="text-xl font-bold mb-2">Your Health Records:</h3>
-        <ul className="list-none">
-          {healthRecords.map((record, index) => (
-            <li key={index} className="mb-2 p-4 bg-gray-100 rounded">
-              {record}
-            </li>
-          ))}
-        </ul>
+        {editable ? (
+          <button onClick={handleUpdate} className="bg-green-500 text-white px-2 py-1 mr-2">
+            Update
+          </button>
+        ) : (
+          <button onClick={() => setEditable(true)} className="bg-blue-500 text-white px-2 py-1 mr-2">
+            Edit
+          </button>
+        )}
+        <button onClick={handleDelete} className="bg-red-500 text-white px-2 py-1">
+          Delete
+        </button>
       </div>
     </div>
   );
 };
 
-export default HealthRecords;
+const HealthRecordsPage = () => {
+  const [records, setRecords] = useState([]);
+  const [newRecordText, setNewRecordText] = useState('');
+
+  const addRecord = () => {
+    if (newRecordText.trim() !== '') {
+      setRecords([...records, { id: Date.now(), text: newRecordText }]);
+      setNewRecordText('');
+    }
+  };
+
+  const updateRecord = (updatedRecord) => {
+    setRecords(records.map((record) => (record.id === updatedRecord.id ? updatedRecord : record)));
+  };
+
+  const deleteRecord = (id) => {
+    setRecords(records.filter((record) => record.id !== id));
+  };
+
+  return (
+    <div className=" bg-gradient-to-b from-blue-200 to-blue-400 min-h-screen flex-auto justify-center items-center">
+      <h1 className="text-2xl font-bold mb-4">Health Records</h1>
+      <div className="mb-4">
+        <input
+          type="text"
+          value={newRecordText}
+          onChange={(e) => setNewRecordText(e.target.value)}
+          placeholder="Enter new health record"
+          className="border p-2 mr-2"
+        />
+        <button onClick={addRecord} className="bg-blue-500 text-white px-4 py-2">
+          Add Record
+        </button>
+      </div>
+      <div>
+        {records.map((record) => (
+          <HealthRecord
+            key={record.id}
+            record={record}
+            onUpdate={updateRecord}
+            onDelete={deleteRecord}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default HealthRecordsPage;

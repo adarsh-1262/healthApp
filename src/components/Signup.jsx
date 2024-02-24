@@ -49,7 +49,8 @@ const Signup = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-md shadow-md">
+  <div className="bg-gradient-to-b from-blue-200 to-blue-400 min-h-screen flex justify-center items-center">
+    <div className=" max-w-md mx-auto mt-10 p-6 bg-red-200 rounded-md shadow-md">
       <h2 className="text-2xl font-bold mb-4 text-center">Sign Up</h2>
       <form onSubmit={handleSignup}>
         <label className="block mb-4">
@@ -103,6 +104,7 @@ const Signup = () => {
         </button>
       </form>
     </div>
+  </div>
   );
 };
 

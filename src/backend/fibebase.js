@@ -11,15 +11,58 @@ const firebaseConfig = {
     messagingSenderId: "68600313234",
     appId: "1:68600313234:web:924aeaafa8157d2a47bd4b",
 };
+const firebaseApp = initializeApp(firebaseConfig);
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-// Check if Firebase app is not initialized
-if (!window.firebaseApps || !window.firebaseApps.length) {
-    const firebaseApp = initializeApp(firebaseConfig);
-  }
+// Initialize Auth and Firestore
+const auth = getAuth(firebaseApp);
+const firestore = getFirestore(firebaseApp);
 
-const auth = getAuth(app);
-const firestore = getFirestore(app);
+// Function to add a health record to Firestore
+const addHealthRecord = async (userId, healthRecordData) => {
+    try {
+        const docRef = await addDoc(collection(firestore, 'healthRecords', userId), healthRecordData);
+        console.log('Health record added with ID: ', docRef.id);
+        return docRef.id;
+    } catch (error) {
+        console.error('Error adding health record: ', error);
+        throw error;
+    }
+};
 
-export { auth, firestore };
+// Function to get health records from Firestore
+const getHealthRecords = async (userId) => {
+    try {
+        const querySnapshot = await getDocs(collection(firestore, 'healthRecords', userId));
+        const records = querySnapshot.docs.map(doc => doc.data());
+        return records;
+    } catch (error) {
+        console.error('Error getting health records: ', error);
+        throw error;
+    }
+};
+
+// Delete an existing health record from Firestore
+const deleteHealthRecord = async (recordId) => {
+    try {
+      const healthRecordRef = firestore.collection('healthRecords').doc(recordId);
+      await healthRecordRef.delete();
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  // Update an existing health record in Firestore
+const updateHealthRecord = async (recordId, updatedData) => {
+    try {
+      const healthRecordRef = firestore.collection('healthRecords').doc(recordId);
+      await healthRecordRef.update(updatedData);
+    } catch (error) {
+      throw error;
+    }
+  };
+  
+
+  
+
+// Export the auth and firestore instances, as well as the addHealthRecord and getHealthRecords functions
+export { auth, firestore, addHealthRecord, getHealthRecords, deleteHealthRecord, updateHealthRecord, firebaseApp };

@@ -10,7 +10,7 @@ import UserProfile  from './components/UserProfile';
 import Signup from './components/Signup';
 import Signin from './components/Signin';
 import { signUpUser, signInUser, signOutUser, onAuthStateChangedListener } from './backend/auth';
-import { addHealthRecord, getHealthRecords } from './backend/firestore';
+import { addHealthRecord, getHealthRecords } from './backend/fibebase';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -68,6 +68,7 @@ function App() {
       console.error('Error adding health record:', error.message);
     }
   };
+  
 
   const getHealthRecordData = async (userId) => {
     try {
