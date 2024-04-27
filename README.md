@@ -8,7 +8,7 @@ To view this website:-
 2. run command in terminal:
    a. npm i
    b. npm run dev
-3. And then you can see the application on your localhost port.
+3. And then you can see the application on your localhost default port.
 4. In the project you have to go on the different pages by your own by clicking on the options available in the Navbar of the application healthApp.
 
 # Thankyou for reviewing our project and we hope that we can make a very big impact in the society through this idea of healthApp.
