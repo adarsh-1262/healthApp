@@ -19,7 +19,7 @@ function App() {
   useEffect(() => {
     const unsubscribe = onAuthStateChangedListener((authUser) => {
       if (authUser) {
-        setUser(authUser);
+        setUser(authUser)
         // Retrieve health record when the user is authenticated
         getHealthRecordData(authUser.uid);
       } else {
